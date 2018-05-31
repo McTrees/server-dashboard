@@ -9,3 +9,13 @@ exports.createUser = function(username, password) { // This function creates an 
   let hash = bcrypt.hashSync(password, 10);
   fns.addUser(username, hash)
 }
+
+exports.checkPassword = function(username, password) {
+  hash = fns.retrieveHash(username).then((hash) => {
+    if(bcrypt.compareSync(password, hash)) {
+      // Passwords match
+    } else {
+      // Passwords don't match
+    }
+  })
+}
