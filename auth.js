@@ -1,7 +1,7 @@
 //This file will handle authentication
 var sqlite3 = require("sqlite3")
 var bcrypt = require('bcrypt')
-var fns = require("db_fns.js")
+var fns = require("./db_fns.js")
 let db = new sqlite3.Database('users.db');
 
 
