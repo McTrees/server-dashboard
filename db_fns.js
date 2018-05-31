@@ -8,10 +8,22 @@ exports.addUser = function(username, hash, twofactor) { //This function adds a u
   db.run("INSERT INTO users (username, passwordHash) VALUES (?, ?)", username, hash)
 }
 
+exports.setSecret = function(username, secret) { //This function adds a two-factor authentication secret to the user account
+  db.run("UPDATE users SET twofactor = ? WHERE username = ?", secret, username)
+}
+
 exports.retrieveHash = function(username) { //This function gets a hash from the database
   return new Promise(function(resolve, reject) {
     db.get(`SELECT passwordHash FROM users WHERE username = '${username}';`, function(err, row) {
       resolve(row["passwordHash"]);
+    });
+  })
+}
+
+exports.retrieveTwoFactor = function(username) { //This function gets a 2fa base32 encoded secret from the database
+  return new Promise(function(resolve, reject) {
+    db.get(`SELECT twofactor FROM users WHERE username = '${username}';`, function(err, row) {
+      resolve(row["twofactor"]);
     });
   })
 }
