@@ -5,9 +5,6 @@ let db = new sqlite3.Database('users.db');
 
 
 exports.addUser = function(username, hash, twofactor) { //This function adds a user to the database
-  if(typeof twofactor == 'undefined') {
-    twofactor = 'x' //x means 'no 2fa'
-  }
   db.run("INSERT INTO users (username, passwordHash) VALUES (?, ?)", username, hash)
 }
 
