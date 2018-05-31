@@ -4,6 +4,9 @@ let db = new sqlite3.Database('users.db');
 
 
 
-exports.addUser = function(username, hash) { //This function adds a user to the database
+exports.addUser = function(username, hash, twofactor) { //This function adds a user to the database
+  if(!twofactor) {
+    twofactor = 'x'
+  }
   db.run("INSERT INTO users (username, hash) VALUES (?, ?)", username, hash)
 }
