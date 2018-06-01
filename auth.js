@@ -7,21 +7,23 @@ var fns = require("./db_fns.js")
 let db = new sqlite3.Database('users.db');
 
 exports.addTwoFactor = function(username) {
-  var secret = speakeasy.generateSecret({length: 20})
+  var secret = speakeasy.generateSecret({
+    length: 20
+  })
   QRCode.toDataURL(secret.otpauth_url, function(err, image_data) {
     console.log("Scan This:" + image_data + "\n\nB32 Encoded Secret Key: " + secret.base32); // A data URI for the QR code image
   });
 }
 
 exports.finalizeTwoFactor = function(username, secretb32, userToken) { //Makes sure user's token matches what we have, then finalizes the two-factor
-  if(checkTwoFactor(secretb32, userToken)) {
+  if (checkTwoFactor(secretb32, userToken)) {
     fns.setSecret(username, secretb32)
     console.log("Set up!")
   } else {
-  //They probably didn't set it up right
-  console.log("You didn't set it up right! Try again.")
-  //TODO: Make it try again
-}
+    //They probably didn't set it up right
+    console.log("You didn't set it up right! Try again.")
+    //TODO: Make it try again
+  }
 }
 
 exports.checkTwoFactorByUsername = function(username, userToken) {
@@ -32,8 +34,8 @@ exports.checkTwoFactorByUsername = function(username, userToken) {
 
 function checkTwoFactor(secretb32, userToken) {
   var token = speakeasy.totp({ //Our token
-  secret: secretb32,
-  encoding: 'base32'
+    secret: secretb32,
+    encoding: 'base32'
   });
   var verified = speakeasy.totp.verify({
     secret: secretb32,
